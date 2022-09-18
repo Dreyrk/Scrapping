@@ -55,73 +55,13 @@ for link_id, link in enumerate(all_links):
             if 'carte' in a.get_attribute('href'):
                 all_underlinks.append(a.get_attribute('href'))
                 print("underlink", len(all_underlinks), "added")
-                print(all_underlinks)
         except:
-            print('brek')
             continue
 
+# TODO: Envelvé les doublons
+print("NB de carte: ", len(all_underlinks))
 
-
-
-    # for td2 in all_td2:
-    #    try:
-    #        under_trs = td2.get_element(By.TAG_NAME, 'table').get_element(By.TAG_NAME, 'tbody')\
-    #            .get_elements(By.TAG_NAME, 'tr')
-    #        for undertr in under_trs:
-
-    #        all_underlinks.append(underlink.get_attribute('href'))
-    #        print("underlink", len(all_underlinks), "added")
-    #    except:
-    #        print('break')
-    #        break
-
-
-     #   all_underlinks.append(td2[1].get_attribute('href'))
-     #   print("underLink", len(all_underlinks), 'added')
-
-#print(all_underlinks)
-
-
-
-
-
-
-#all_a = driver.find_elements(By.TAG_NAME, 'a')  # <- get all html tag <a>
-#links = []
-#for a in all_a:
-#    links.append(a.get_attribute('href')) # <- make a list of all attribute of all a tag
-
-# remove useless links
-#clean_links = []
-
-#for link in links:
-#    pattern = "ultrajeux.com/edition"
-#    if pattern in link:
-#        clean_links.append(link)
-
-#table_elem = driver.find_element(By.TAG_NAME, 'table')  # <- get html tag <table>
-#table = table_elem.text
-
-# str -> list
-#table = table.split('\n')
-
-# filter on 1995 to 2005
-#all_names = []
-#for filtr in date_filters:
-#    for name in table:
-#        if filtr in name:
-#            all_names.append(name)
-
-#print(clean_links)
-#print('\n###\n')
-#print(all_names)
-
-
-#TODO: faire matcher les all_names avec les clean_links pour n'avoir que les links qu'on veut
-
-
-
-# from this list
-# go to every link
-# scrap
-
+for underlink_id, underlink in enumerate(all_underlinks):
+    print("Carte N°", underlink_id)
+    driver.get(underlink)
+    #scrap
