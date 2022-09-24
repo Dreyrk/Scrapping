@@ -1,14 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup
+import pandas as pd
 import time
-
-def gotoTD(table):
-    all_td = []
-    all_tr = table.find_element(By.TAG_NAME, 'tbody').find_elements(By.TAG_NAME, 'tr')
-    for tr in all_tr:
-        all_td.append(tr.find_elements(By.TAG_NAME, 'td'))
-    return all_td
 
 # Set Up Client
 
@@ -30,7 +23,9 @@ if cookie.is_displayed():
     print('cookieclicked')
     cookie.click()  # <- cookie pass here
 
-all_links=[]
+# Get all page with links to other page that have links to card
+
+all_links = []
 all_underlinks = []
 date_filters = ['1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005']
 all_tr = driver.find_elements(By.TAG_NAME, 'tr')
@@ -44,6 +39,7 @@ for tr in all_tr:
                 all_links.append(a.get_attribute('href'))
                 print("link", len(all_links), "added")
 
+# Get all the interesting pages who got cards
 
 for link_id, link in enumerate(all_links):
     print('Page', link_id)
@@ -58,10 +54,26 @@ for link_id, link in enumerate(all_links):
         except:
             continue
 
-# TODO: Envelvé les doublons
+all_underlinks = list(set(all_underlinks))
 print("NB de carte: ", len(all_underlinks))
+
+# Get all interesting cards
+
+df =  pd.DataFrame(columns=['Name', 'Rarity', 'Description'])
 
 for underlink_id, underlink in enumerate(all_underlinks):
     print("Carte N°", underlink_id)
     driver.get(underlink)
-    #scrap
+    all_article = driver.find_elements(By.CLASS_NAME, 'main_bloc_article')
+    name = all_article[0].find_element(By.TAG_NAME, 'h2').text
+    rarity = all_article[0].find_element(By.TAG_NAME, 'h4').text
+    try:
+      description = all_article[3].text
+    except:
+      continue
+    for arcticle in all_article[:15]:
+      name = arcticle
+      print(arcticle.text)
+
+print("all_article = ", all_article)
+
